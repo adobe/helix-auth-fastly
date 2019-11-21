@@ -13,7 +13,7 @@
 ## Installation
 
 ```bash
-$ npm install -S @adobe/helix-auth-fastly
+$ npm install @adobe/helix-auth-fastly
 ```
 
 ## Usage
