@@ -23,11 +23,11 @@ helix-auth-fastly also exposes functionality for conditional fastly authenticati
 
 To use helix-auth-fastly wrapper execute:
 ```
-const { fastlyWrapper } = @adobe/helix-auth-fastly; 
+const { fastlyAuthWrapper } = @adobe/helix-auth-fastly; 
 
 let action = func;
 
-action = fastlyWrapper(action,
+wrap = fastlyAuthWrapper(action,
 {
     token: fastlyAuthToken, 
     service: fastlyServiceId,
@@ -38,11 +38,10 @@ To use helix-auth-fastly conditionally; you can also execute:
 ```
 const { authFastly } = @adobe/helix-auth-fastly;
 
-try{
-    await authFastly(token, service);
-} catch (e) {
-    e.statusCode = 401;
-    throw e;
+if(authFastly(token, service)){
+    //authentication has succeeded
+} else {
+    //authentication has failed
 }
 ```
 
