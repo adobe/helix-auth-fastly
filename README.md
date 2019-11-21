@@ -17,6 +17,30 @@ $ npm install -S @adobe/helix-auth-fastly
 ```
 
 ## Usage
+helix-auth-fastly is a wrapper around actions to ensure that actions are fastly authenticated.
+
+helix-auth-fastly also exposes functionality for conditional fastly authentication.
+
+To use helix-auth-fastly wrapper execute:
+```
+const { fastlyWrapper } = @adobe/helix-auth-fastly; 
+
+let action = func;
+
+action = fastlyWrapper(action);
+```
+
+To use helix-auth-fastly conditionally; you can also execute:
+```
+const { authFastly } = @adobe/helix-auth-fastly;
+
+try{
+    await authFastly(token, service);
+} catch (e) {
+    e.statusCode = 401;
+    throw e;
+}
+```
 
 See the [API documentation](docs/API.md).
 
