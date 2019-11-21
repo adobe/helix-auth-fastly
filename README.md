@@ -25,12 +25,12 @@ To use helix-auth-fastly wrapper execute:
 ```
 const { fastlyAuthWrapper } = @adobe/helix-auth-fastly; 
 
-let action = func;
+const action = func;
 
-wrap = fastlyAuthWrapper(action,
-{
-    token: fastlyAuthToken, 
-    service: fastlyServiceId,
+const result = fastlyAuthWrapper(action, {token: 'tokenName', service: 'serviceName'})
+({
+    tokenName: token, 
+    serviceName: service, 
 });
 ```
 
