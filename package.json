@@ -21,7 +21,9 @@
     "url": "https://github.com/adobe/helix-auth-fastly/issues"
   },
   "homepage": "https://github.com/adobe/helix-auth-fastly#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@adobe/fastly-native-promises": "^1.14.2"
+  },
   "devDependencies": {
     "@adobe/eslint-config-helix": "1.1.0",
     "@semantic-release/changelog": "3.0.5",

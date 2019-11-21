@@ -10,9 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
- const { authFastly, fastlyAuthWrapper } = require('../src/index.js');
- const assert = require('assert');
- const env = require('../src/env.js');
+const assert = require('assert');
+const { authFastly, fastlyAuthWrapper } = require('../src/index.js');
+const env = require('../src/env.js');
 
 /* eslint-env mocha */
 describe('testing util functions', () => {
@@ -41,30 +41,28 @@ describe('testing util functions', () => {
 describe('fastlyAuthWrapper Tests', async () => {
   const service = '0bxMEaYAJV6SoqFlbZ2n1f';
 
-  const action = () => {
-    return "Marquise";
-  }
+  const action = () => 'Marquise';
 
   it('works with default behavior', async () => {
-    const result = await fastlyAuthWrapper(action)({token: env.token, service});
+    const result = await fastlyAuthWrapper(action)({ token: env.token, service });
 
-    assert.equal(result, "Marquise");
+    assert.equal(result, 'Marquise');
   });
 
   it('works with excess parameters', async () => {
-    const result = await fastlyAuthWrapper(action)({token: env.token, service}, "something", "something2", "something3");
+    const result = await fastlyAuthWrapper(action)({ token: env.token, service }, 'something', 'something2', 'something3');
 
-    assert.equal(result, "Marquise");
+    assert.equal(result, 'Marquise');
   });
 
   it('fails with bad token', async () => {
-    const result = await fastlyAuthWrapper(action)({token: "badToken", service});
+    const result = await fastlyAuthWrapper(action)({ token: 'badToken', service });
 
     assert.deepEqual(result, { statusCode: 401, body: 'Fastly Authentication Failed' });
   });
 
   it('fails with bad service', async () => {
-    const result = await fastlyAuthWrapper(action)({token: env.token, service: "bad service"});
+    const result = await fastlyAuthWrapper(action)({ token: env.token, service: 'bad service' });
 
     assert.deepEqual(result, { statusCode: 401, body: 'Fastly Authentication Failed' });
   });

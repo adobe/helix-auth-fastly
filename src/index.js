@@ -29,18 +29,18 @@ async function authFastly(token, service) {
 }
 
 function fastlyAuthWrapper(func, {
-  token='token',
-  service='service'
-}={}){
-  return async (opts,...rest) => {
+  token = 'token',
+  service = 'service',
+} = {}) {
+  return async (opts, ...rest) => {
     if (await authFastly(opts[token], opts[service])) {
       return func(opts, ...rest);
     }
     return {
       statusCode: 401,
-      body: "Fastly Authentication Failed"
-    }
-  }
+      body: 'Fastly Authentication Failed',
+    };
+  };
 }
 
 module.exports = { fastlyAuthWrapper, authFastly };
