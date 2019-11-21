@@ -27,7 +27,11 @@ const { fastlyWrapper } = @adobe/helix-auth-fastly;
 
 let action = func;
 
-action = fastlyWrapper(action);
+action = fastlyWrapper(action,
+{
+    token: fastlyAuthToken, 
+    service: fastlyServiceId,
+});
 ```
 
 To use helix-auth-fastly conditionally; you can also execute:
