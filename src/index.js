@@ -9,14 +9,39 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+const initfastly = require('@adobe/fastly-native-promises');
 
 /**
- * This is the main function
- * @param {string} name name of the person to greet
- * @returns {string} a greeting
+ * authenticates token and service with Fastly
+ *
+ * @param {string} token Fastly Authentication Token
+ * @param {string} service serviceid for a helix-project
  */
-function main(name = 'world') {
-  return `Hello, ${name}.`;
+async function authFastly(token, service) {
+  // verify Fastly credentials
+  try {
+    const Fastly = await initfastly(token, service);
+    await Fastly.getVersions();
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
-module.exports = { main };
+function fastlyAuthWrapper(func, {
+  token = "token", 
+  service = "service"
+}){
+  
+  return async (opts,...rest) => {
+    if (await authFastly(opts[token], opts[service])) {
+      return func(opts, ...rest);
+    }
+    return {
+      statusCode: 401,
+      body: "Fastly Authentication Failed"
+    }
+  } 
+}
+
+module.exports = { fastlyAuthWrapper, authFastly };
