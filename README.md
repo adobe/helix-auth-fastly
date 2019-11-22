@@ -25,15 +25,15 @@ $ npm install @adobe/helix-auth-fastly
 To use the `helix-auth-fastly` wrapper set up your OpenWhisk action like this:
 
 ```javascript
+const { wrap } = require('@adobe/openwhisk-action-utils'};
 const { fastlyAuthWrapper } = require('@adobe/helix-auth-fastly'); 
 
-const action = () = {
+const main = () = {
   // your action code goes here
 };
 
-const main = fastlyAuthWrapper(action, {token: 'tokenName', service: 'serviceName'});
-
-module.exports.main = main;
+module.exports.main = = wrap(action)
+  .with(fastlyAuthWrapper, {token: 'tokenName', service: 'serviceName'});
 ```
 
 To use helix-auth-fastly conditionally; you can also execute:
