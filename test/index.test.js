@@ -11,54 +11,103 @@
  */
 
 const assert = require('assert');
+const NodeHttpAdapter = require('@pollyjs/adapter-node-http');
+const FSPersister = require('@pollyjs/persister-fs');
+const { setupMocha: setupPolly } = require('@pollyjs/core');
+const path = require('path');
 const { authFastly, fastlyAuthWrapper } = require('../src/index.js');
-const env = require('../src/env.js');
 
 /* eslint-env mocha */
-describe('testing util functions', () => {
-  const service = '0bxMEaYAJV6SoqFlbZ2n1f';
+describe('authFastly', () => {
+  setupPolly({
+    recordFailedRequests: false,
+    recordIfMissing: false,
+    logging: false,
+    adapters: [NodeHttpAdapter],
+    persister: FSPersister,
+    persisterOptions: {
+      fs: {
+        recordingsDir: path.resolve(__dirname, 'fixtures/recordings'),
+      },
+    },
+    matchRequestsBy: {
+      headers: {
+        exclude: ['fastly-key'],
+      },
+      url: false,
+      method: true,
+    },
+  });
+
+  const token = 'fake_token';
+  const service = 'fake_service';
 
   it('authFastly correctly authenticates', async () => {
-    const ret = await authFastly(env.token, service);
+    const ret = await authFastly(token, service);
     assert.equal(true, ret);
   });
 
   it('authFastly rejects with bad token', async () => {
-    const ret = await authFastly(env.token, service);
+    const ret = await authFastly(token, service);
     assert.equal(true, ret);
   });
 
   it('authFastly rejects with bad serviceid', async () => {
-    const ret = await authFastly(env.token, service);
+    const ret = await authFastly(token, service);
     assert.equal(true, ret);
   });
 });
 
 describe('fastlyAuthWrapper Tests', async () => {
-  const service = '0bxMEaYAJV6SoqFlbZ2n1f';
+  setupPolly({
+    recordFailedRequests: false,
+    recordIfMissing: false,
+    logging: false,
+    adapters: [NodeHttpAdapter],
+    persister: FSPersister,
+    persisterOptions: {
+      fs: {
+        recordingsDir: path.resolve(__dirname, 'fixtures/recordings'),
+      },
+    },
+    matchRequestsBy: {
+      headers: {
+        exclude: ['fastly-key'],
+      },
+      url: false,
+      method: true,
+    },
+  });
+
+  const token = 'fake_token';
+  const service = 'fake_service';
 
   const action = () => 'Marquise';
+  const action2 = (fastlyCreds, something1, something2, something3) => ({
+    arg1: something1,
+    arg2: something2,
+    arg3: something3,
+  });
 
   it('works with default behavior', async () => {
-    const result = await fastlyAuthWrapper(action)({ token: env.token, service });
+    const result = await fastlyAuthWrapper(action)({ token, service });
 
     assert.equal(result, 'Marquise');
   });
 
   it('works with excess parameters', async () => {
-    const result = await fastlyAuthWrapper(action)({ token: env.token, service }, 'something', 'something2', 'something3');
-
-    assert.equal(result, 'Marquise');
+    const result = await fastlyAuthWrapper(action2)({ token, service }, 'something', 'something2', 'something3');
+    assert.deepEqual(result, { arg1: 'something', arg2: 'something2', arg3: 'something3' });
   });
 
   it('fails with bad token', async () => {
-    const result = await fastlyAuthWrapper(action)({ token: 'badToken', service });
+    const result = await fastlyAuthWrapper(action)({ token: 'badtoken', service });
 
     assert.deepEqual(result, { statusCode: 401, body: 'Fastly Authentication Failed' });
   });
 
   it('fails with bad service', async () => {
-    const result = await fastlyAuthWrapper(action)({ token: env.token, service: 'bad service' });
+    const result = await fastlyAuthWrapper(action)({ token, service: 'bad service' });
 
     assert.deepEqual(result, { statusCode: 401, body: 'Fastly Authentication Failed' });
   });

@@ -23,18 +23,28 @@ async function authFastly(token, service) {
     const Fastly = await initfastly(token, service);
     await Fastly.getVersions();
   } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
     return false;
   }
   return true;
 }
 
+/**
+ * wrapper that takes an action and faslty authenticates
+ * it, upon success it returns the action with remaining
+ * params.
+ *
+ * @param {string} token Fastly Authentication Token
+ * @param {string} service serviceid for a helix-project
+ */
 function fastlyAuthWrapper(func, {
-  token = 'token',
+  tokenParamName = 'token',
   service = 'service',
 } = {}) {
-  return async (opts, ...rest) => {
-    if (await authFastly(opts[token], opts[service])) {
-      return func(opts, ...rest);
+  return async (params, ...rest) => {
+    if (await authFastly(params[tokenParamName], params[service])) {
+      return func(params, ...rest);
     }
     return {
       statusCode: 401,
