@@ -48,13 +48,13 @@ describe('authFastly', () => {
   });
 
   it('authFastly rejects with bad token', async () => {
-    const ret = await authFastly(token, service);
-    assert.equal(true, ret);
+    const ret = await authFastly('bad token', service);
+    assert.equal(false, ret);
   });
 
   it('authFastly rejects with bad serviceid', async () => {
-    const ret = await authFastly(token, service);
-    assert.equal(true, ret);
+    const ret = await authFastly(token, 'bad service');
+    assert.equal(false, ret);
   });
 });
 

@@ -32,7 +32,7 @@ async function authFastly(token, service) {
 
 /**
  * wrapper that takes an action and faslty authenticates
- * it, upon success it returns the action with remaining
+ * it, upon success it invokes the action with remaining
  * params.
  *
  * @param {string} token Fastly Authentication Token
@@ -40,10 +40,10 @@ async function authFastly(token, service) {
  */
 function fastlyAuthWrapper(func, {
   tokenParamName = 'token',
-  service = 'service',
+  serviceParamName = 'service',
 } = {}) {
   return async (params, ...rest) => {
-    if (await authFastly(params[tokenParamName], params[service])) {
+    if (await authFastly(params[tokenParamName], params[serviceParamName])) {
       return func(params, ...rest);
     }
     return {
