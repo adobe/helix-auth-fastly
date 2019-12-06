@@ -22,8 +22,7 @@
   },
   "homepage": "https://github.com/adobe/helix-auth-fastly#readme",
   "dependencies": {
-    "@adobe/fastly-native-promises": "^1.14.2",
-    "dotenv": "^8.2.0"
+    "@adobe/fastly-native-promises": "^1.14.2"
   },
   "devDependencies": {
     "@adobe/eslint-config-helix": "1.1.0",
