@@ -9,14 +9,48 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+const initfastly = require('@adobe/fastly-native-promises');
 
 /**
- * This is the main function
- * @param {string} name name of the person to greet
- * @returns {string} a greeting
+ * authenticates token and service with Fastly
+ *
+ * @param {string} token Fastly Authentication Token
+ * @param {string} service serviceid for a helix-project
  */
-function main(name = 'world') {
-  return `Hello, ${name}.`;
+async function authFastly(token, service) {
+  // verify Fastly credentials
+  try {
+    const Fastly = await initfastly(token, service);
+    await Fastly.getVersions();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+    return false;
+  }
+  return true;
 }
 
-module.exports = { main };
+/**
+ * wrapper that takes an action and faslty authenticates
+ * it, upon success it invokes the action with remaining
+ * params.
+ *
+ * @param {string} token Fastly Authentication Token
+ * @param {string} service serviceid for a helix-project
+ */
+function fastlyAuthWrapper(func, {
+  tokenParamName = 'token',
+  serviceParamName = 'service',
+} = {}) {
+  return async (params, ...rest) => {
+    if (await authFastly(params[tokenParamName], params[serviceParamName])) {
+      return func(params, ...rest);
+    }
+    return {
+      statusCode: 401,
+      body: 'Fastly Authentication Failed',
+    };
+  };
+}
+
+module.exports = { fastlyAuthWrapper, authFastly };

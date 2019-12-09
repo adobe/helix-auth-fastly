@@ -17,32 +17,40 @@ $ npm install @adobe/helix-auth-fastly
 ```
 
 ## Usage
-helix-auth-fastly is a wrapper around actions to ensure that actions are fastly authenticated.
 
-helix-auth-fastly also exposes functionality for conditional fastly authentication.
+### As a wrapper
 
-To use helix-auth-fastly wrapper execute:
+`helix-auth-fastly` is a wrapper around OpenWhisk actions to that ensures that invocations of the action are only successful if valid Fastly credentials, in the forms of a service ID and token, are provided.
+
+`helix-auth-fastly` can also be used as a simple single-purpose function to validate a pair of Fastly credentials.
+
+To use the `helix-auth-fastly` wrapper set up your OpenWhisk action like this:
+
+```javascript
+const { wrap } = require('@adobe/openwhisk-action-utils'};
+const { fastlyAuthWrapper } = require('@adobe/helix-auth-fastly'); 
+
+const main = () = {
+  // your action code goes here
+};
+
+module.exports.main = = wrap(action)
+  .with(fastlyAuthWrapper, {token: 'tokenName', service: 'serviceName'});
 ```
-const { fastlyWrapper } = @adobe/helix-auth-fastly; 
 
-let action = func;
+Invocations of your action that do not provide valid credentials will fail with an HTTP status code of `401` (Unauthorized) and your `main` function will never be called.
 
-action = fastlyWrapper(action,
-{
-    token: fastlyAuthToken, 
-    service: fastlyServiceId,
-});
-```
+### Standalone
 
 To use helix-auth-fastly conditionally; you can also execute:
-```
-const { authFastly } = @adobe/helix-auth-fastly;
+```javascript
 
-try{
-    await authFastly(token, service);
-} catch (e) {
-    e.statusCode = 401;
-    throw e;
+const { authFastly } = require('@adobe/helix-auth-fastly');
+
+if(await authFastly(token, service)){
+    //authentication has succeeded
+} else {
+    //authentication has failed
 }
 ```
 
