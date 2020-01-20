@@ -1,3 +1,10 @@
+# 1.0.0 (2020-01-20)
+
+
+### Bug Fixes
+
+* **ci:** update to node10-stretch ([c170456](https://github.com/adobe/helix-auth-fastly/commit/c170456cb4ee4f366bef42cdb4cf8066ee1a7f3b))
+
 # 1.0.0 (2019-11-20)
 
 
