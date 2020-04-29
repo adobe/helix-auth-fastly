@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@adobe/eslint-config-helix": "1.1.0",
-    "@pollyjs/adapter-node-http": "4.0.4",
-    "@pollyjs/core": "4.0.4",
-    "@pollyjs/persister-fs": "4.0.4",
+    "@pollyjs/adapter-node-http": "4.2.0",
+    "@pollyjs/core": "4.1.0",
+    "@pollyjs/persister-fs": "4.2.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
     "@semantic-release/git": "9.0.0",
@@ -45,11 +45,11 @@
     "istanbul": "1.1.0-alpha.1",
     "jsdoc-to-markdown": "5.0.3",
     "junit-report-builder": "2.0.0",
-    "lint-staged": "10.1.6",
+    "lint-staged": "10.2.0",
     "lodash": "4.17.15",
-    "mocha": "7.1.1",
+    "mocha": "7.1.2",
     "nyc": "15.0.1",
-    "semantic-release": "17.0.6"
+    "semantic-release": "17.0.7"
   },
   "lint-staged": {
     "*.js": "eslint"
